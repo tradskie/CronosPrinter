@@ -248,7 +248,7 @@ function refreshData() {
         }).catch((err) => {
             console.log('getSiteInfo', err);
         });
-}
+
 
      web3.eth.getBalance(currentAddr).then(userBalance => {
          usrBal = userBalance;
@@ -367,7 +367,7 @@ function refreshData() {
 
     updateBuyPrice();
     console.log('Done refreshing data...')
-
+}
 function copyRef() {
     var $temp = $("<input>");
     $("body").append($temp);
