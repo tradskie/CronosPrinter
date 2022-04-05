@@ -12,29 +12,14 @@
 }
 
 body {
-  font-family: "Poppins", sans-serif;
-  background-color: rgb(33, 36, 41) !important;
-  background: var(--radial-gradient);
+  font-family: 'Libre Baskerville', serif;
+  background: url("../img/BG1.jpg");
+  background-repeat: no-repeat;
+  background-size: auto;
+  background-attachment: fixed;
+  position: relative;
   color: #fff;
 }
-
-
-video { 
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  min-width: 100%;
-  min-height: 100%;
-  width: auto;
-  height: auto;
-  z-index: -100;
-  transform: translateX(-50%) translateY(-50%);
-  background: url('//demosthenes.info/assets/images/polina.jpg') no-repeat;
-  background-size: cover;
-  transition: 1s opacity;
-  }
-
-
   /* @media (max-width: 750px) {
     body {
 
@@ -55,11 +40,11 @@ video {
   }
 
   h1 {
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-family: 'Libre Baskerville', serif;
   }
 
   h2, h3, h4, h5, h6 {
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-family: 'Libre Baskerville', serif;
   }
 
   /*--------------------------------------------------------------
@@ -172,7 +157,7 @@ video {
     color: #fff;
   }
   #header .logo a span {
-    color: var(--token);
+    text-shadow: 2px 2px 5px rgb(255, 255, 255); color: black
   }
 
   #header .logo img {
@@ -506,7 +491,7 @@ video {
     letter-spacing: 1px;
     font-weight: 700;
     line-height: 50px;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-family: 'Libre Baskerville', serif;
   }
 
   #hero h2 {
@@ -527,27 +512,126 @@ video {
     padding: 20px;
     color: #fff;
     position: relative;
+    top: 50%;
+    left: 34%;
     text-align: left;
-    background: #0000008c;
-    border-radius: 18px;
-    border-style: solid;
-    border-color: #944ac5;
-    border-width: 2px;
+    transform: translate(-50%, -50%);
+    background: #03050ca6;
+    box-sizing: border-box;
+    overflow: hidden;
+    box-shadow: 1px 0px 50px 5px rgba(253, 253, 255, 0.863);
+    border: 1px solid #ffffff;
+    color: white;
+    border-radius: 15px;
   }
-
-
-  .content-box {
-    overflow-wrap: anywhere;
+  .box1:before{
+    content: '';
+    position:absolute;
+    top:0;
+    left:-100%;
+    width:100%;
+    height:700px;
+    background: rgba(255,255,255,0.1);
+    transition:0.5s;
+    pointer-events: none;
   }
+  
+  .box1:hover:before{
+    left:-50%;
+    transform: skewX(-5deg);
+  }
+  
+  
+  .box1 .content{
+    position:absolute;
+    top:15px;
+    left:15px;
+    right:15px;
+    bottom:15px;
+    border:1px solid #f0a591;
+    padding:20px;
+    text-align:center;
+    box-shadow: 0 5px 10px rgba(9,0,0,0.5);
+    
+  }
+  
+  .box1 span{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    box-sizing: border-box;
+    
+  }
+  
+  .box1 span:nth-child(1)
+  {
+    transform:rotate(0deg);
+  }
+  
+  .box1 span:nth-child(2)
+  {
+    transform:rotate(90deg);
+  }
+  
+  .box1 span:nth-child(3)
+  {
+    transform:rotate(180deg);
+  }
+  
+  .box1 span:nth-child(4)
+  {
+    transform:rotate(270deg);
+  }
+  
+  .box1 span:before
+  {
+    content: '';
+    position: absolute;
+    width:100%;
+    height: 2px;
+    background: #50dfdb;
+    animation: animate 4s linear infinite;
+  }
+  
+  @keyframes animate {
+    0% {
+    transform:scaleX(0);
+    transform-origin: left;
+    }
+    50%
+    {
+      transform:scaleX(1);
+    transform-origin: left;
+    }
+    50.1%
+    {
+      transform:scaleX(1);
+    transform-origin: right;
+      
+    }
+    
+    100%
+    {
+      transform:scaleX(0);
+    transform-origin: right;
+      
+    }
+    
+    
+  } 
+
 
   #main .container {
     background: #0000008c;
     max-width: 1200px;
     margin: 0 auto;
-    border-radius: 18px;
-    border-style: solid;
-    border-width: 2px;
-    border-color: #944ac5;
+    box-shadow: 1px 0px 50px 5px rgb(253 253 255 / 86%);
+    border: 1px solid #ffffff;
+    color: white;
+    border-radius: 15px;
   }
 
   #main .content-box {
@@ -628,9 +712,9 @@ video {
 
   .stats-row-container .stat {
     color: white;
-    background: var(--content-primary);
+    background: rgb(0 0 0 / 45%);
     backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.35);
+    border: 1px solid rgb(255 255 255 / 41%);
     border-radius: 18px;
     width: auto;
     min-width: 215px;
@@ -639,6 +723,7 @@ video {
     margin-top: 10px;
     margin-left: 10px;
     padding: 15px 0px;
+    box-shadow: 1px 0px 50px 5px rgb(253 253 255 / 86%);
   }
 
   #main .stats-row-container .stat {
@@ -1039,7 +1124,7 @@ video {
     letter-spacing: 2px;
     text-transform: uppercase;
     color: #aaaaaa;
-    font-family: "Poppins", sans-serif;
+    font-family: 'Libre Baskerville', serif;
   }
   .section-title h2::after {
     content: "";
@@ -1055,7 +1140,7 @@ video {
     font-size: 26px;
     font-weight: 600;
     text-transform: uppercase;
-    font-family: "Poppins", sans-serif;
+    font-family: 'Libre Baskerville', serif;
     color:  rgba(255,255,255,0.8);
   }
 
@@ -1082,8 +1167,6 @@ video {
 
   .mine-card {
     color: white;
-    background: var(--content-primary);
-    backdrop-filter: blur(8px);
     border: 1px solid rgba(255, 255, 255, 0.35);
     border-radius: 18px;
     height: 100%;
@@ -1091,6 +1174,8 @@ video {
     justify-content: space-around;
     padding: 20px 20px 15px 20px;
     margin-top: 7px;
+    background: rgb(0 0 0 / 45%);
+    backdrop-filter: blur(8px);
   }
 
   @media only screen and (max-width: 480px) {
@@ -1440,7 +1525,7 @@ video {
     font-size: 14px;
     line-height: 24px;
     margin-bottom: 0;
-    font-family: "Raleway", sans-serif;
+    font-family: 'Libre Baskerville', serif;
     color: #fff;
   }
   #footer .footer-top .social-links a {
@@ -1566,7 +1651,7 @@ video {
     color: rgb(255, 255, 255);
     display: block;
     position: relative;
-    font-family: "Poppins", sans-serif;
+    font-family: 'Libre Baskerville', serif;
     font-size: 16px;
     line-height: 24px;
     font-weight: 500;
@@ -1612,3 +1697,119 @@ video {
       padding: 0;
     }
   }
+  .content h2{ font-size:19px;}
+
+  .box{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    height: 300px;
+    background: #111845a6;
+    box-sizing: border-box;
+    overflow: hidden;
+    box-shadow: 0 20px 50px rgb(23, 32, 90);
+    border: 2px solid #2a3cad;
+    color: white;
+    padding: 20px;
+  }
+  
+  .box:before{
+    content: '';
+    position:absolute;
+    top:0;
+    left:-100%;
+    width:100%;
+    height:100%;
+    background: rgba(255,255,255,0.1);
+    transition:0.5s;
+    pointer-events: none;
+  }
+  
+  .box:hover:before{
+    left:-50%;
+    transform: skewX(-5deg);
+  }
+  
+  
+  .box .content{
+    position:absolute;
+    top:15px;
+    left:15px;
+    right:15px;
+    bottom:15px;
+    border:1px solid #f0a591;
+    padding:20px;
+    text-align:center;
+    box-shadow: 0 5px 10px rgba(9,0,0,0.5);
+    
+  }
+  
+  .box span{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    box-sizing: border-box;
+    
+  }
+  
+  .box span:nth-child(1)
+  {
+    transform:rotate(0deg);
+  }
+  
+  .box span:nth-child(2)
+  {
+    transform:rotate(90deg);
+  }
+  
+  .box span:nth-child(3)
+  {
+    transform:rotate(180deg);
+  }
+  
+  .box span:nth-child(4)
+  {
+    transform:rotate(270deg);
+  }
+  
+  .box span:before
+  {
+    content: '';
+    position: absolute;
+    width:100%;
+    height: 2px;
+    background: #50dfdb;
+    animation: animate 4s linear infinite;
+  }
+  
+  @keyframes animate {
+    0% {
+    transform:scaleX(0);
+    transform-origin: left;
+    }
+    50%
+    {
+      transform:scaleX(1);
+    transform-origin: left;
+    }
+    50.1%
+    {
+      transform:scaleX(1);
+    transform-origin: right;
+      
+    }
+    
+    100%
+    {
+      transform:scaleX(0);
+    transform-origin: right;
+      
+    }
+    
+    
+  } 
