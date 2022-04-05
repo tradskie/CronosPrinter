@@ -30,7 +30,7 @@ const minerAddress = '0x625043b774FD8B687d21B5d0408d64744e742557'; //mainnet con
 
 
 
-var tokenContract;
+var minerContract;
 
 var started = true;
 
@@ -224,8 +224,8 @@ function refreshData() {
         contract.methods.getBalance().call().then(balance => {
             contractBalance = balance;
             var amt = web3.utils.fromWei(balance)
-            $('#contract-balance').html(amt);
-             var usd = Number(priceInUSD*amt).toFixed(2);
+            $('#contract-balance').html(roundNum(amt));
+            var usd = Number(priceInUSD*amt).toFixed(2);
              $("#contract-balance-usd").html(usd)
         }).catch((err) => {
             console.log('getBalance', err);
@@ -248,7 +248,6 @@ function refreshData() {
         }).catch((err) => {
             console.log('getSiteInfo', err);
         });
-    }
 
      web3.eth.getBalance(currentAddr).then(userBalance => {
          usrBal = userBalance;
@@ -591,7 +590,7 @@ function hatchEggs(){
     if (canSell) {
         canSell = false;
         console.log(currentAddr)
-        contract.methods.hatchEggs(true).send({ from: currentAddr}).then(result => {
+        contract.methods.hatchEggs().send({ from: currentAddr}).then(result => {
             refreshData()
         }).catch((err) => {
             console.log(err)
