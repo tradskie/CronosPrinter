@@ -178,24 +178,24 @@ function refreshData() {
         console.log('REFERRAL', err);
     });
 
-    contract.methods.COMPOUND_BONUS_MAX_TIMES().call().then(r => {
+    contract.methods.COMPOUND_BONUS_MAX_DAYS().call().then(r => {
         compoundMaxDays = r;
         var maxCompoundPercent = r*compoundPercent;
         $("#max-compound").html(`+${maxCompoundPercent}%`)
     }).catch((err) => {
-        console.log('COMPOUND_BONUS_MAX_TIMES', err);
+        console.log('COMPOUND_BONUS_MAX_DAYS', err);
     });
 
     contract.methods.WALLET_DEPOSIT_LIMIT().call().then(cro => {
         maxDeposit = cro;
-        $("#max-deposit").html(`${readableCroAmount(cro)} CRO`)
+        $("#max-deposit").html(`${readableCRO(cro)} CRO`)
     }).catch((err) => {
         console.log('WALLET_DEPOSIT_LIMIT', err);
     });
 	
 	contract.methods.MIN_INVEST_LIMIT().call().then(cro => {
         minDeposit = cro;
-        $("#min-deposit").html(`${readableCroAmount(cro)} CRO`)
+        $("#min-deposit").html(`${readableCRO(cro)} CRO`)
     }).catch((err) => {
         console.log('MIN_INVEST_LIMIT', err);
     });
@@ -210,7 +210,7 @@ function refreshData() {
     contract.methods.getEggsYield().call().then(result => {
         var miners = result[0];
         var cro = result[1];
-        var amt = readableCroAmount(cro, 4);
+        var amt = readableCRO(cro, 4);
 
         $("#example-miners").html(miners)
 		$("#example-cro").html(amt)
@@ -224,7 +224,6 @@ function refreshData() {
         contract.methods.getBalance().call().then(balance => {
             contractBalance = balance;
             var amt = web3.utils.fromWei(balance)
-	    $('#contract-balance').html((+amt).toFixed(2));
             $('#contract-balance').html(amt);
              var usd = Number(priceInUSD*amt).toFixed(2);
              $("#contract-balance-usd").html(usd)
@@ -241,7 +240,7 @@ function refreshData() {
             $('#total-players').html(result._totalDeposits);
             var ref = result._totalRefBonus;
             if (ref > 0) {
-                var refCRO = readableCroAmount(ref, 2);
+                var refCRO = readableCRO(ref, 2);
                 $("#total-ref").html(refCRO);
                  var refUSD = Number(priceInUSD*refCRO).toFixed(2);
                  $('#total-ref-usd').html(refUSD)
@@ -312,7 +311,7 @@ function refreshData() {
         if (miners > 0) {
             $("#your-miners").html(miners);
             contract.methods.getAvailableEarnings(currentAddr).call().then(function (earnings) {
-                var croMined = readableCroAmount(earnings, 4)
+                var croMined = readableCRO(earnings, 4)
                 $("#mined").html(croMined);
                  var minedUsd = Number(priceInUSD*croMined).toFixed(2);
                  $('#mined-usd').html(minedUsd)
@@ -325,7 +324,7 @@ function refreshData() {
         }
 
         if (referralEggRewards > 0) {
-            var refCRO = readableCroAmount(referralEggRewards, 2);
+            var refCRO = readableCRO(referralEggRewards, 2);
             $("#ref-rewards-cro").html(refCRO);
              var refUSD = Number(priceInUSD*refCRO).toFixed(2);
              $('#ref-rewards-usd').html(refUSD)
@@ -342,7 +341,7 @@ function refreshData() {
         if (miners > 0) {
             var eggsPerDay = 24*60*60 * miners ;
             contract.methods.calculateEggSellForYield(eggsPerDay, web3.utils).call().then(earnings => {
-                var eggsCRO = readableCroAmount(earnings, 4)
+                var eggsCRO = readableCRO(earnings, 4)
                 $("#eggs-per-day").html(eggsCRO);
                  var eggsUSD = Number(priceInUSD*eggsCRO).toFixed(2);
                  $('#eggs-per-day-usd').html(eggsUSD)
@@ -390,21 +389,21 @@ function getQueryVariable(variable) {
 
 function setInitialDeposit(initialDeposit) {
     totalDeposits = initialDeposit;
-    var initialCRO = readableCroAmount(initialDeposit, 2);
+    var initialCRO = readableCRO(initialDeposit, 2);
      var initialUSD = Number(priceInUSD*initialCRO).toFixed(2);
     $("#initial-deposit").html(initialCRO);
      $("#initial-deposit-usd").html(initialUSD);
 }
 
 function setTotalDeposit(totalDeposit) {
-    var totalCRO = readableCroAmount(totalDeposit, 2);
+    var totalCRO = readableCRO(totalDeposit, 2);
      var totalUSD = Number(priceInUSD*totalCRO).toFixed(2);
     $("#total-deposit").html(totalCRO);
      $("#total-deposit-usd").html(totalUSD);
 }
 
 function setTotalWithdrawn(totalWithdrawn) {
-    var totalCRO = readableCroAmount(totalWithdrawn, 2);
+    var totalCRO = readableCRO(totalWithdrawn, 2);
      var totalUSD = Number(priceInUSD*totalCRO).toFixed(2);
     $("#total-withdrawn").html(totalCRO);
      $("#total-withdrawn-usd").html(totalUSD);
@@ -557,13 +556,13 @@ function buyEggs(){
 	
     var amt = web3.utils.toWei(cro);
 	if(+amt < +minDeposit) {
-		alert(`you cannot deposit less than ${readableCroAmount(minDeposit, 2)} CRO`);
+		alert(`you cannot deposit less than ${readableCRO(minDeposit, 2)} CRO`);
         return
     }
 	
 	var amt = web3.utils.toWei(cro);
 	if(+amt + +totalDeposits > +maxDeposit) {
-		alert(`you cannot deposit more than ${readableCroAmount(maxDeposit, 2)} CRO`);
+		alert(`you cannot deposit more than ${readableCRO(maxDeposit, 2)} CRO`);
         return
     }
 	
@@ -645,6 +644,6 @@ function httpGetAsync(theUrl, callback) {
     xmlHttp.send(null);
 }
 
-function readableCroAmount(amount, decimals) {
+function readableCRO(amount, decimals) {
   return (amount / 1e18).toFixed(decimals);
 }
