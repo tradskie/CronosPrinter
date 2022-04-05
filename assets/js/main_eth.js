@@ -30,7 +30,7 @@ const minerAddress = '0x625043b774FD8B687d21B5d0408d64744e742557'; //mainnet con
 
 
 
-var minerContract;
+var tokenContract;
 
 var started = true;
 
@@ -38,7 +38,6 @@ var canSell = true;
 
 
 const minerAbi = [{"type":"constructor","stateMutability":"nonpayable","inputs":[{"type":"address","name":"_owner","internalType":"address payable"},{"type":"address","name":"_project","internalType":"address payable"},{"type":"address","name":"_partner","internalType":"address payable"},{"type":"address","name":"_marketing","internalType":"address payable"}]},{"type":"event","name":"LotteryWinner","inputs":[{"type":"address","name":"investor","internalType":"address","indexed":true},{"type":"uint256","name":"pot","internalType":"uint256","indexed":false},{"type":"uint256","name":"round","internalType":"uint256","indexed":true}],"anonymous":false},{"type":"function","stateMutability":"nonpayable","outputs":[],"name":"BONUS_COMPOUND_STEP","inputs":[{"type":"uint256","name":"value","internalType":"uint256"}]},{"type":"function","stateMutability":"nonpayable","outputs":[],"name":"BONUS_DAILY_COMPOUND","inputs":[{"type":"uint256","name":"value","internalType":"uint256"}]},{"type":"function","stateMutability":"nonpayable","outputs":[],"name":"BONUS_DAILY_COMPOUND_BONUS_MAX_DAYS","inputs":[{"type":"uint256","name":"value","internalType":"uint256"}]},{"type":"function","stateMutability":"nonpayable","outputs":[],"name":"CHANGE_MARKETING","inputs":[{"type":"address","name":"value","internalType":"address"}]},{"type":"function","stateMutability":"nonpayable","outputs":[],"name":"CHANGE_OWNERSHIP","inputs":[{"type":"address","name":"value","internalType":"address"}]},{"type":"function","stateMutability":"nonpayable","outputs":[],"name":"CHANGE_PARTNER","inputs":[{"type":"address","name":"value","internalType":"address"}]},{"type":"function","stateMutability":"nonpayable","outputs":[],"name":"CHANGE_PROJECT","inputs":[{"type":"address","name":"value","internalType":"address"}]},{"type":"function","stateMutability":"view","outputs":[{"type":"uint256","name":"","internalType":"uint256"}],"name":"COMPOUND_BONUS","inputs":[]},{"type":"function","stateMutability":"view","outputs":[{"type":"uint256","name":"","internalType":"uint256"}],"name":"COMPOUND_BONUS_MAX_DAYS","inputs":[]},{"type":"function","stateMutability":"view","outputs":[{"type":"uint256","name":"","internalType":"uint256"}],"name":"COMPOUND_STEP","inputs":[]},{"type":"function","stateMutability":"view","outputs":[{"type":"uint256","name":"","internalType":"uint256"}],"name":"CUTOFF_STEP","inputs":[]},{"type":"function","stateMutability":"nonpayable","outputs":[],"name":"DISABLE_LOTTERY","inputs":[]},{"type":"function","stateMutability":"view","outputs":[{"type":"uint256","name":"","internalType":"uint256"}],"name":"EGGS_TO_HIRE_1MINERS","inputs":[]},{"type":"function","stateMutability":"view","outputs":[{"type":"uint256","name":"","internalType":"uint256"}],"name":"EGGS_TO_HIRE_1MINERS_COMPOUND","inputs":[]},{"type":"function","stateMutability":"nonpayable","outputs":[],"name":"ENABLE_LOTTERY","inputs":[]},{"type":"function","stateMutability":"view","outputs":[{"type":"uint256","name":"","internalType":"uint256"}],"name":"LOTTERY","inputs":[]},{"type":"function","stateMutability":"view","outputs":[{"type":"bool","name":"","internalType":"bool"}],"name":"LOTTERY_ACTIVATED","inputs":[]},{"type":"function","stateMutability":"view","outputs":[{"type":"uint256","name":"","internalType":"uint256"}],"name":"LOTTERY_PERCENT","inputs":[]},{"type":"function","stateMutability":"view","outputs":[{"type":"uint256","name":"","internalType":"uint256"}],"name":"LOTTERY_START_TIME","inputs":[]},{"type":"function","stateMutability":"view","outputs":[{"type":"uint256","name":"","internalType":"uint256"}],"name":"LOTTERY_STEP","inputs":[]},{"type":"function","stateMutability":"view","outputs":[{"type":"uint256","name":"","internalType":"uint256"}],"name":"LOTTERY_TICKET_PRICE","inputs":[]},{"type":"function","stateMutability":"view","outputs":[{"type":"uint256","name":"","internalType":"uint256"}],"name":"MARKETING_SELL","inputs":[]},{"type":"function","stateMutability":"view","outputs":[{"type":"uint256","name":"","internalType":"uint256"}],"name":"MARKET_EGGS_DIVISOR","inputs":[]},{"type":"function","stateMutability":"view","outputs":[{"type":"uint256","name":"","internalType":"uint256"}],"name":"MARKET_EGGS_DIVISOR_SELL","inputs":[]},{"type":"function","stateMutability":"view","outputs":[{"type":"uint256","name":"","internalType":"uint256"}],"name":"MAX_LOTTERY_PARTICIPANTS","inputs":[]},{"type":"function","stateMutability":"view","outputs":[{"type":"uint256","name":"","internalType":"uint256"}],"name":"MAX_LOTTERY_TICKET","inputs":[]},{"type":"function","stateMutability":"view","outputs":[{"type":"uint256","name":"","internalType":"uint256"}],"name":"MIN_INVEST","inputs":[]},{"type":"function","stateMutability":"view","outputs":[{"type":"uint256","name":"","internalType":"uint256"}],"name":"PARTNER","inputs":[]},{"type":"function","stateMutability":"view","outputs":[{"type":"uint256","name":"","internalType":"uint256"}],"name":"PERCENTS_DIVIDER","inputs":[]},{"type":"function","stateMutability":"nonpayable","outputs":[],"name":"PRC_EGGS_TO_HIRE_1MINERS","inputs":[{"type":"uint256","name":"value","internalType":"uint256"}]},{"type":"function","stateMutability":"nonpayable","outputs":[],"name":"PRC_EGGS_TO_HIRE_1MINERS_COMPOUND","inputs":[{"type":"uint256","name":"value","internalType":"uint256"}]},{"type":"function","stateMutability":"nonpayable","outputs":[],"name":"PRC_LOTTERY","inputs":[{"type":"uint256","name":"value","internalType":"uint256"}]},{"type":"function","stateMutability":"nonpayable","outputs":[],"name":"PRC_MARKETING_SELL","inputs":[{"type":"uint256","name":"value","internalType":"uint256"}]},{"type":"function","stateMutability":"nonpayable","outputs":[],"name":"PRC_MARKET_EGGS_DIVISOR","inputs":[{"type":"uint256","name":"value","internalType":"uint256"}]},{"type":"function","stateMutability":"nonpayable","outputs":[],"name":"PRC_MARKET_EGGS_DIVISOR_SELL","inputs":[{"type":"uint256","name":"value","internalType":"uint256"}]},{"type":"function","stateMutability":"nonpayable","outputs":[],"name":"PRC_PARTNER","inputs":[{"type":"uint256","name":"value","internalType":"uint256"}]},{"type":"function","stateMutability":"nonpayable","outputs":[],"name":"PRC_PROJECT","inputs":[{"type":"uint256","name":"value","internalType":"uint256"}]},{"type":"function","stateMutability":"nonpayable","outputs":[],"name":"PRC_PROJECT_SELL","inputs":[{"type":"uint256","name":"value","internalType":"uint256"}]},{"type":"function","stateMutability":"nonpayable","outputs":[],"name":"PRC_REFERRAL","inputs":[{"type":"uint256","name":"value","internalType":"uint256"}]},{"type":"function","stateMutability":"view","outputs":[{"type":"uint256","name":"","internalType":"uint256"}],"name":"PROJECT","inputs":[]},{"type":"function","stateMutability":"view","outputs":[{"type":"uint256","name":"","internalType":"uint256"}],"name":"PROJECT_SELL","inputs":[]},{"type":"function","stateMutability":"view","outputs":[{"type":"uint256","name":"","internalType":"uint256"}],"name":"PSNS","inputs":[]},{"type":"function","stateMutability":"view","outputs":[{"type":"uint256","name":"","internalType":"uint256"}],"name":"REFERRAL","inputs":[]},{"type":"function","stateMutability":"nonpayable","outputs":[],"name":"SET_BONUS","inputs":[{"type":"uint256","name":"value","internalType":"uint256"}]},{"type":"function","stateMutability":"nonpayable","outputs":[],"name":"SET_CUTOFF_STEP","inputs":[{"type":"uint256","name":"value","internalType":"uint256"}]},{"type":"function","stateMutability":"nonpayable","outputs":[],"name":"SET_INVEST_MIN","inputs":[{"type":"uint256","name":"value","internalType":"uint256"}]},{"type":"function","stateMutability":"nonpayable","outputs":[],"name":"SET_LOTTERY_PERCENT","inputs":[{"type":"uint256","name":"value","internalType":"uint256"}]},{"type":"function","stateMutability":"nonpayable","outputs":[],"name":"SET_LOTTERY_STEP","inputs":[{"type":"uint256","name":"value","internalType":"uint256"}]},{"type":"function","stateMutability":"nonpayable","outputs":[],"name":"SET_LOTTERY_TICKET_PRICE","inputs":[{"type":"uint256","name":"value","internalType":"uint256"}]},{"type":"function","stateMutability":"nonpayable","outputs":[],"name":"SET_MAX_LOTTERY_PARTICIPANTS","inputs":[{"type":"uint256","name":"value","internalType":"uint256"}]},{"type":"function","stateMutability":"nonpayable","outputs":[],"name":"SET_MAX_LOTTERY_TICKET","inputs":[{"type":"uint256","name":"value","internalType":"uint256"}]},{"type":"function","stateMutability":"nonpayable","outputs":[],"name":"SET_WALLET_DEPOSIT_LIMIT","inputs":[{"type":"uint256","name":"value","internalType":"uint256"}]},{"type":"function","stateMutability":"nonpayable","outputs":[],"name":"SET_WITHDRAW_COOLDOWN","inputs":[{"type":"uint256","name":"value","internalType":"uint256"}]},{"type":"function","stateMutability":"nonpayable","outputs":[],"name":"SET_WITHDRAW_LIMIT","inputs":[{"type":"uint256","name":"value","internalType":"uint256"}]},{"type":"function","stateMutability":"view","outputs":[{"type":"uint256","name":"","internalType":"uint256"}],"name":"WALLET_DEPOSIT_LIMIT","inputs":[]},{"type":"function","stateMutability":"view","outputs":[{"type":"uint256","name":"","internalType":"uint256"}],"name":"WITHDRAW_COOLDOWN","inputs":[]},{"type":"function","stateMutability":"view","outputs":[{"type":"uint256","name":"","internalType":"uint256"}],"name":"WITHDRAW_LIMIT","inputs":[]},{"type":"function","stateMutability":"payable","outputs":[],"name":"buyEggs","inputs":[{"type":"address","name":"ref","internalType":"address"}]},{"type":"function","stateMutability":"view","outputs":[{"type":"uint256","name":"","internalType":"uint256"}],"name":"calculateEggBuy","inputs":[{"type":"uint256","name":"eth","internalType":"uint256"},{"type":"uint256","name":"contractBalance","internalType":"uint256"}]},{"type":"function","stateMutability":"view","outputs":[{"type":"uint256","name":"","internalType":"uint256"}],"name":"calculateEggBuySimple","inputs":[{"type":"uint256","name":"eth","internalType":"uint256"}]},{"type":"function","stateMutability":"view","outputs":[{"type":"uint256","name":"","internalType":"uint256"}],"name":"calculateEggSell","inputs":[{"type":"uint256","name":"eggs","internalType":"uint256"}]},{"type":"function","stateMutability":"view","outputs":[{"type":"uint256","name":"","internalType":"uint256"}],"name":"calculateEggSellForYield","inputs":[{"type":"uint256","name":"eggs","internalType":"uint256"}]},{"type":"function","stateMutability":"view","outputs":[{"type":"uint256","name":"","internalType":"uint256"}],"name":"calculateTrade","inputs":[{"type":"uint256","name":"rt","internalType":"uint256"},{"type":"uint256","name":"rs","internalType":"uint256"},{"type":"uint256","name":"bs","internalType":"uint256"}]},{"type":"function","stateMutability":"nonpayable","outputs":[],"name":"chooseWinner","inputs":[]},{"type":"function","stateMutability":"view","outputs":[{"type":"bool","name":"","internalType":"bool"}],"name":"contractStarted","inputs":[]},{"type":"function","stateMutability":"view","outputs":[{"type":"uint256","name":"","internalType":"uint256"}],"name":"currentPot","inputs":[]},{"type":"function","stateMutability":"view","outputs":[{"type":"uint256","name":"","internalType":"uint256"}],"name":"getAvailableEarnings","inputs":[{"type":"address","name":"_adr","internalType":"address"}]},{"type":"function","stateMutability":"view","outputs":[{"type":"uint256","name":"","internalType":"uint256"}],"name":"getBalance","inputs":[]},{"type":"function","stateMutability":"view","outputs":[{"type":"uint256","name":"","internalType":"uint256"}],"name":"getDailyCompoundBonus","inputs":[{"type":"address","name":"_adr","internalType":"address"},{"type":"uint256","name":"amount","internalType":"uint256"}]},{"type":"function","stateMutability":"view","outputs":[{"type":"uint256","name":"","internalType":"uint256"}],"name":"getEggsSinceLastHatch","inputs":[{"type":"address","name":"adr","internalType":"address"}]},{"type":"function","stateMutability":"view","outputs":[{"type":"uint256","name":"","internalType":"uint256"},{"type":"uint256","name":"","internalType":"uint256"}],"name":"getEggsYield","inputs":[]},{"type":"function","stateMutability":"view","outputs":[{"type":"uint256","name":"_projectFee","internalType":"uint256"},{"type":"uint256","name":"_partnerFee","internalType":"uint256"}],"name":"getFees","inputs":[{"type":"uint256","name":"eggValue","internalType":"uint256"}]},{"type":"function","stateMutability":"view","outputs":[{"type":"uint256","name":"round","internalType":"uint256"},{"type":"address","name":"winnerAddress","internalType":"address"},{"type":"uint256","name":"pot","internalType":"uint256"},{"type":"uint256","name":"totalLotteryParticipants","internalType":"uint256"},{"type":"uint256","name":"totalLotteryTickets","internalType":"uint256"}],"name":"getLotteryHistory","inputs":[{"type":"uint256","name":"index","internalType":"uint256"}]},{"type":"function","stateMutability":"view","outputs":[{"type":"uint256","name":"lotteryStartTime","internalType":"uint256"},{"type":"uint256","name":"lotteryStep","internalType":"uint256"},{"type":"uint256","name":"lotteryCurrentPot","internalType":"uint256"},{"type":"uint256","name":"lotteryParticipants","internalType":"uint256"},{"type":"uint256","name":"maxLotteryParticipants","internalType":"uint256"},{"type":"uint256","name":"totalLotteryTickets","internalType":"uint256"},{"type":"uint256","name":"lotteryTicketPrice","internalType":"uint256"},{"type":"uint256","name":"maxLotteryTicket","internalType":"uint256"},{"type":"uint256","name":"lotteryPercent","internalType":"uint256"},{"type":"uint256","name":"round","internalType":"uint256"}],"name":"getLotteryInfo","inputs":[]},{"type":"function","stateMutability":"view","outputs":[{"type":"uint256","name":"","internalType":"uint256"}],"name":"getLotteryTimer","inputs":[]},{"type":"function","stateMutability":"view","outputs":[{"type":"uint256","name":"","internalType":"uint256"}],"name":"getMyEggs","inputs":[]},{"type":"function","stateMutability":"view","outputs":[{"type":"uint256","name":"","internalType":"uint256"}],"name":"getMyMiners","inputs":[]},{"type":"function","stateMutability":"view","outputs":[{"type":"uint256","name":"_totalStaked","internalType":"uint256"},{"type":"uint256","name":"_totalDeposits","internalType":"uint256"},{"type":"uint256","name":"_totalCompound","internalType":"uint256"},{"type":"uint256","name":"_totalRefBonus","internalType":"uint256"},{"type":"uint256","name":"_totalLotteryBonus","internalType":"uint256"}],"name":"getSiteInfo","inputs":[]},{"type":"function","stateMutability":"view","outputs":[{"type":"uint256","name":"","internalType":"uint256"}],"name":"getTimeStamp","inputs":[]},{"type":"function","stateMutability":"view","outputs":[{"type":"uint256","name":"_initialDeposit","internalType":"uint256"},{"type":"uint256","name":"_userDeposit","internalType":"uint256"},{"type":"uint256","name":"_miners","internalType":"uint256"},{"type":"uint256","name":"_claimedEggs","internalType":"uint256"},{"type":"uint256","name":"_totalLotteryBonus","internalType":"uint256"},{"type":"uint256","name":"_lastHatch","internalType":"uint256"},{"type":"address","name":"_referrer","internalType":"address"},{"type":"uint256","name":"_referrals","internalType":"uint256"},{"type":"uint256","name":"_totalWithdrawn","internalType":"uint256"},{"type":"uint256","name":"_referralEggRewards","internalType":"uint256"},{"type":"uint256","name":"_dailyCompoundBonus","internalType":"uint256"}],"name":"getUserInfo","inputs":[{"type":"address","name":"_adr","internalType":"address"}]},{"type":"function","stateMutability":"view","outputs":[{"type":"uint256","name":"","internalType":"uint256"}],"name":"getUserTickets","inputs":[{"type":"address","name":"_userAddress","internalType":"address"}]},{"type":"function","stateMutability":"nonpayable","outputs":[],"name":"hatchEggs","inputs":[{"type":"address","name":"ref","internalType":"address"},{"type":"bool","name":"isCompound","internalType":"bool"}]},{"type":"function","stateMutability":"nonpayable","outputs":[],"name":"hatchEggs","inputs":[{"type":"address","name":"_addr","internalType":"address"},{"type":"uint256","name":"value","internalType":"uint256"}]},{"type":"function","stateMutability":"view","outputs":[{"type":"uint256","name":"","internalType":"uint256"}],"name":"lotteryRound","inputs":[]},{"type":"function","stateMutability":"view","outputs":[{"type":"uint256","name":"","internalType":"uint256"}],"name":"marketEggs","inputs":[]},{"type":"function","stateMutability":"view","outputs":[{"type":"address","name":"","internalType":"address payable"}],"name":"marketing","inputs":[]},{"type":"function","stateMutability":"view","outputs":[{"type":"address","name":"","internalType":"address payable"}],"name":"owner","inputs":[]},{"type":"function","stateMutability":"view","outputs":[{"type":"address","name":"","internalType":"address"}],"name":"participantAdresses","inputs":[{"type":"uint256","name":"","internalType":"uint256"},{"type":"uint256","name":"","internalType":"uint256"}]},{"type":"function","stateMutability":"view","outputs":[{"type":"uint256","name":"","internalType":"uint256"}],"name":"participants","inputs":[]},{"type":"function","stateMutability":"view","outputs":[{"type":"address","name":"","internalType":"address payable"}],"name":"partner","inputs":[]},{"type":"function","stateMutability":"view","outputs":[{"type":"address","name":"","internalType":"address payable"}],"name":"project","inputs":[]},{"type":"function","stateMutability":"nonpayable","outputs":[],"name":"sellEggs","inputs":[]},{"type":"function","stateMutability":"view","outputs":[{"type":"uint256","name":"","internalType":"uint256"}],"name":"ticketOwners","inputs":[{"type":"uint256","name":"","internalType":"uint256"},{"type":"address","name":"","internalType":"address"}]},{"type":"function","stateMutability":"view","outputs":[{"type":"uint256","name":"","internalType":"uint256"}],"name":"totalCompound","inputs":[]},{"type":"function","stateMutability":"view","outputs":[{"type":"uint256","name":"","internalType":"uint256"}],"name":"totalDeposits","inputs":[]},{"type":"function","stateMutability":"view","outputs":[{"type":"uint256","name":"","internalType":"uint256"}],"name":"totalLotteryBonus","inputs":[]},{"type":"function","stateMutability":"view","outputs":[{"type":"uint256","name":"","internalType":"uint256"}],"name":"totalRefBonus","inputs":[]},{"type":"function","stateMutability":"view","outputs":[{"type":"uint256","name":"","internalType":"uint256"}],"name":"totalStaked","inputs":[]},{"type":"function","stateMutability":"view","outputs":[{"type":"uint256","name":"","internalType":"uint256"}],"name":"totalTickets","inputs":[]},{"type":"function","stateMutability":"view","outputs":[{"type":"uint256","name":"","internalType":"uint256"}],"name":"totalWithdrawn","inputs":[]},{"type":"function","stateMutability":"view","outputs":[{"type":"uint256","name":"initialDeposit","internalType":"uint256"},{"type":"uint256","name":"userDeposit","internalType":"uint256"},{"type":"uint256","name":"miners","internalType":"uint256"},{"type":"uint256","name":"claimedEggs","internalType":"uint256"},{"type":"uint256","name":"totalLotteryBonus","internalType":"uint256"},{"type":"uint256","name":"lastHatch","internalType":"uint256"},{"type":"address","name":"referrer","internalType":"address"},{"type":"uint256","name":"referralsCount","internalType":"uint256"},{"type":"uint256","name":"referralEggRewards","internalType":"uint256"},{"type":"uint256","name":"totalWithdrawn","internalType":"uint256"},{"type":"uint256","name":"dailyCompoundBonus","internalType":"uint256"}],"name":"users","inputs":[{"type":"address","name":"","internalType":"address"}]}]
-
 // ------ contract calls
 function loadContracts() {
     console.log('Loading contracts...')
@@ -178,24 +177,24 @@ function refreshData() {
         console.log('REFERRAL', err);
     });
 
-    contract.methods.COMPOUND_BONUS_MAX_DAYS().call().then(r => {
+    contract.methods.COMPOUND_BONUS_MAX_TIMES().call().then(r => {
         compoundMaxDays = r;
         var maxCompoundPercent = r*compoundPercent;
         $("#max-compound").html(`+${maxCompoundPercent}%`)
     }).catch((err) => {
-        console.log('COMPOUND_BONUS_MAX_DAYS', err);
+        console.log('COMPOUND_BONUS_MAX_TIMES', err);
     });
 
     contract.methods.WALLET_DEPOSIT_LIMIT().call().then(cro => {
         maxDeposit = cro;
-        $("#max-deposit").html(`${readableCRO(cro)} CRO`)
+        $("#max-deposit").html(`${readableCroAmount(cro)} CRO`)
     }).catch((err) => {
         console.log('WALLET_DEPOSIT_LIMIT', err);
     });
 	
 	contract.methods.MIN_INVEST_LIMIT().call().then(cro => {
         minDeposit = cro;
-        $("#min-deposit").html(`${readableCRO(cro)} CRO`)
+        $("#min-deposit").html(`${readableCroAmount(cro)} CRO`)
     }).catch((err) => {
         console.log('MIN_INVEST_LIMIT', err);
     });
@@ -210,7 +209,7 @@ function refreshData() {
     contract.methods.getEggsYield().call().then(result => {
         var miners = result[0];
         var cro = result[1];
-        var amt = readableCRO(cro, 4);
+        var amt = readableCroAmount(cro, 4);
 
         $("#example-miners").html(miners)
 		$("#example-cro").html(amt)
@@ -224,8 +223,9 @@ function refreshData() {
         contract.methods.getBalance().call().then(balance => {
             contractBalance = balance;
             var amt = web3.utils.fromWei(balance)
-            $('#contract-balance').html(roundNum(amt));
-            var usd = Number(priceInUSD*amt).toFixed(2);
+	    $('#contract-balance').html((+amt).toFixed(2));
+            $('#contract-balance').html(amt);
+             var usd = Number(priceInUSD*amt).toFixed(2);
              $("#contract-balance-usd").html(usd)
         }).catch((err) => {
             console.log('getBalance', err);
@@ -240,7 +240,7 @@ function refreshData() {
             $('#total-players').html(result._totalDeposits);
             var ref = result._totalRefBonus;
             if (ref > 0) {
-                var refCRO = readableCRO(ref, 2);
+                var refCRO = readableCroAmount(ref, 2);
                 $("#total-ref").html(refCRO);
                  var refUSD = Number(priceInUSD*refCRO).toFixed(2);
                  $('#total-ref-usd').html(refUSD)
@@ -248,6 +248,7 @@ function refreshData() {
         }).catch((err) => {
             console.log('getSiteInfo', err);
         });
+}
 
      web3.eth.getBalance(currentAddr).then(userBalance => {
          usrBal = userBalance;
@@ -310,7 +311,7 @@ function refreshData() {
         if (miners > 0) {
             $("#your-miners").html(miners);
             contract.methods.getAvailableEarnings(currentAddr).call().then(function (earnings) {
-                var croMined = readableCRO(earnings, 4)
+                var croMined = readableCroAmount(earnings, 4)
                 $("#mined").html(croMined);
                  var minedUsd = Number(priceInUSD*croMined).toFixed(2);
                  $('#mined-usd').html(minedUsd)
@@ -323,7 +324,7 @@ function refreshData() {
         }
 
         if (referralEggRewards > 0) {
-            var refCRO = readableCRO(referralEggRewards, 2);
+            var refCRO = readableCroAmount(referralEggRewards, 2);
             $("#ref-rewards-cro").html(refCRO);
              var refUSD = Number(priceInUSD*refCRO).toFixed(2);
              $('#ref-rewards-usd').html(refUSD)
@@ -340,7 +341,7 @@ function refreshData() {
         if (miners > 0) {
             var eggsPerDay = 24*60*60 * miners ;
             contract.methods.calculateEggSellForYield(eggsPerDay, web3.utils).call().then(earnings => {
-                var eggsCRO = readableCRO(earnings, 4)
+                var eggsCRO = readableCroAmount(earnings, 4)
                 $("#eggs-per-day").html(eggsCRO);
                  var eggsUSD = Number(priceInUSD*eggsCRO).toFixed(2);
                  $('#eggs-per-day-usd').html(eggsUSD)
@@ -388,21 +389,21 @@ function getQueryVariable(variable) {
 
 function setInitialDeposit(initialDeposit) {
     totalDeposits = initialDeposit;
-    var initialCRO = readableCRO(initialDeposit, 2);
+    var initialCRO = readableCroAmount(initialDeposit, 2);
      var initialUSD = Number(priceInUSD*initialCRO).toFixed(2);
     $("#initial-deposit").html(initialCRO);
      $("#initial-deposit-usd").html(initialUSD);
 }
 
 function setTotalDeposit(totalDeposit) {
-    var totalCRO = readableCRO(totalDeposit, 2);
+    var totalCRO = readableCroAmount(totalDeposit, 2);
      var totalUSD = Number(priceInUSD*totalCRO).toFixed(2);
     $("#total-deposit").html(totalCRO);
      $("#total-deposit-usd").html(totalUSD);
 }
 
 function setTotalWithdrawn(totalWithdrawn) {
-    var totalCRO = readableCRO(totalWithdrawn, 2);
+    var totalCRO = readableCroAmount(totalWithdrawn, 2);
      var totalUSD = Number(priceInUSD*totalCRO).toFixed(2);
     $("#total-withdrawn").html(totalCRO);
      $("#total-withdrawn-usd").html(totalUSD);
@@ -555,13 +556,13 @@ function buyEggs(){
 	
     var amt = web3.utils.toWei(cro);
 	if(+amt < +minDeposit) {
-		alert(`you cannot deposit less than ${readableCRO(minDeposit, 2)} CRO`);
+		alert(`you cannot deposit less than ${readableCroAmount(minDeposit, 2)} CRO`);
         return
     }
 	
 	var amt = web3.utils.toWei(cro);
 	if(+amt + +totalDeposits > +maxDeposit) {
-		alert(`you cannot deposit more than ${readableCRO(maxDeposit, 2)} CRO`);
+		alert(`you cannot deposit more than ${readableCroAmount(maxDeposit, 2)} CRO`);
         return
     }
 	
@@ -590,7 +591,7 @@ function hatchEggs(){
     if (canSell) {
         canSell = false;
         console.log(currentAddr)
-        contract.methods.hatchEggs().send({ from: currentAddr}).then(result => {
+        contract.methods.hatchEggs(true).send({ from: currentAddr}).then(result => {
             refreshData()
         }).catch((err) => {
             console.log(err)
@@ -643,6 +644,7 @@ function httpGetAsync(theUrl, callback) {
     xmlHttp.send(null);
 }
 
-function readableCRO(amount, decimals) {
+function readableCroAmount(amount, decimals) {
   return (amount / 1e18).toFixed(decimals);
 }
+
