@@ -182,10 +182,10 @@ body {
     white-space: nowrap;
     transition: 0.3s;
     font-size: 14px;
-    border: 2px solid var(--token);
+    border: 2px solid white;
   }
   .connect-btn:hover {
-    background: var(--token);
+    background: black;
     color: #343a40;
   }
   @media (max-width: 992px) {
