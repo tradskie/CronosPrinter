@@ -624,7 +624,7 @@ function getBalance(callback){
 }
 
 function tokenPrice(callback) {
-	const url = "https://api.coingecko.com/api/v3/simple/price?ids=binanceusd&vs_currencies=usd";
+	const url = "https://api.coingecko.com/api/v3/simple/price?ids=binancecoin,usd&vs_currencies=usd";
 	httpGetAsync(url,callback);
 }
 function httpGetAsync(theUrl, callback) {
