@@ -760,6 +760,7 @@ body {
     }
     .stats-row-container {
       padding-top: unset;
+      display: grid;
     }
 
     #main .stats-row-container {
