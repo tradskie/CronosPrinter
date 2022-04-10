@@ -289,7 +289,8 @@
                   </span>
                   <input class="form-control" id="bnb-spend" name="buy-miners" onChange="updateBuyPrice()" step="100" type="number" value="1">
                 </strong>
-                <button class="btn btn-invest" id="buy-eggs-btn" onclick="buyEggs()" role="button" disabled>
+                <br>
+                <button class="btn glow-on-hover" id="buy-eggs-btn" onclick="buyEggs()" role="button" disabled style="margin-top: 6px;">
                   Hire
                   <span id="eggs-to-buy">0</span>
                   Miners
@@ -332,14 +333,15 @@
                   <div style="text-align: center; padding-bottom: 7px;"><span id="claim-timer">--:--:--</span></div>
                   <div class="btn-container">
                     <div>
-                      <button class="btn btn-withdraw" id="withdraw" onclick="sellEggs()" role="button" disabled>
+                      <button class="btn glow-on-hover" id="withdraw" onclick="sellEggs()" role="button" disabled>
                         Withdraw
                         <span class="cooldown" id="cooldown-timer">in --:--:--</span>
                         <span class="tax" id="withdraw-tax">-40% tax</span>
                       </button>
                     </div>
+                    <br>
                     <div>
-                      <button class="btn btn-reinvest" id="reinvest" onclick="hatchEggs()" role="button" disabled>
+                      <button class="btn glow-on-hover" id="reinvest" onclick="hatchEggs()" role="button" disabled>
                         Compound
                         <span class="compound">
                           (<span class="compound" id="compound-bonus">+0% bonus</span>)
