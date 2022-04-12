@@ -186,7 +186,7 @@ function refreshData() {
 
     contract.methods.WALLET_DEPOSIT_LIMIT().call().then(bnb => {
         maxDeposit = bnb;
-        $("#max-deposit").html(`${readableBNB(bnb)} BNB`)
+        $("#max-deposit").html(`${readableBNB(bnb)} CRO`)
     }).catch((err) => {
         console.log(err);
     });
@@ -552,11 +552,11 @@ function buyEggs(){
 
     var amt = web3.utils.toWei(bnb);
 	if(+amt + +totalDeposits > +maxDeposit) {
-		alert(`you cannot deposit more than ${readableBNB(maxDeposit, 2)} BNB`);
+		alert(`you cannot deposit more than ${readableBNB(maxDeposit, 2)} CRO`);
         return
     }
     if(+amt > usrBal) {
-		alert("you do not have " + bnb + " BNB in your wallet");
+		alert("you do not have " + bnb + " CRO in your wallet");
         return
     }
 
