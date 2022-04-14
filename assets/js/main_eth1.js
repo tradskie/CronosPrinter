@@ -359,7 +359,8 @@ function refreshData() {
             });
         }
 		
-		console.log('compoundCount = ' + compoundCount)
+	console.log('compoundCount = ' + compoundCount)
+	    
         if (dailyCompoundBonus < compoundCount) {
             contract.methods.WITHDRAWAL_TAX().call().then(tax => {
                 $("#withdraw-tax").html(`(-${tax/10}% tax)`)
