@@ -53,12 +53,10 @@
   <!-- ======= Header ======= -->
   <header id="header" class="fixed-top ">
     <div class="container d-flex align-items-center justify-content-lg-between">
-      <h1 class="logo me-auto me-lg-0"><a href="index.html"><img style="height: 100%; width: 40px; padding-right: 5px;" src="assets/img/CRO.png" alt="">Cronos Token Printer.</a></img></h1>
+      <h1 class="logo me-auto me-lg-0"><a href="index.html"><img style="height: 100%; width: 40px; padding-right: 5px;" src="assets/img/CRO.png" alt="">Cronos Space Miner.</a></img></h1>
       <nav id="navbar" class="navbar order-last order-lg-0">
         <ul>
-          <li><a class="btn connect-btn" href="https://piston-token.com/ref/angrybird_mamoet" target="_blank">Check out Piston!</a></li>
-          <li><a class="btn connect-btn" href="" target="_blank">Check BusdFarm!</a></li>
-          <!--<li><a class="btn connect-btn" href="https://ada.tokenprinters.online/?ref=0x7ec5c8753ed76a517a5c48de14f489f334b33ed2" target="_blank">Check AdaPrinter!</a></li> -->	          
+           <!--<li><a class="btn connect-btn" href="https://ada.tokenprinters.online/?ref=0x7ec5c8753ed76a517a5c48de14f489f334b33ed2" target="_blank">Check AdaPrinter!</a></li> -->	          
 	         <li> 
             <a class="nav-link" href="https://app.cronaswap.org/swap" target="_blank"><img class="nav-logo" id="logo" alt="" src=""></img>Buy $CRO</a>
           </li>
@@ -93,31 +91,31 @@
       <div class="content-box" data-aos="zoom-in" style="border-style: solid;border-width: 1px;border-radius: 15px;padding: 20px;">
         <div class="row">
           <div class="col-lg-6">
-            <h1>Welcome to our <span class="busd" style="text-shadow: 2px 2px 5px rgb(255, 255, 255); color: black">Cronos Token Printer</span>!</h1>
-            <h2>A game developed under by Token Printers Dev Team.</h2>
-            <h4>
+            <h3><span class="busd" style="text-shadow: 2px 2px 5px rgb(255, 255, 255); color: black">Cronos Space Miner</span></h3>
+            <h2>A smart and sustainable way to grow your<span class="busd"> CRO </span></h2>
+            <h4> 
               <i class="bi-check2-square bnb-icon"></i>
-              <span id="daily-rate">10% daily interest contract basis.</span>
+              <span id="daily-rate">0% Daily ~ 0% APR</span>
             </h4>
             <h4>
               <i class="bi-check2-square bnb-icon"></i>
-              <span id="daily-compound">5% stacking compound bonus every 12 hours, max of 3 days. (30%)</span>
+              <span id="daily-compound">0% Stacking Compound Bonus</span>
             </h4>
             <h4>
               <i class="bi-check2-square bnb-icon"></i>
-              <span id="ref-bonus">8% Referral Bonus, rewards wil go straight to the wallet.</span>
+              <span id="ref-bonus">0% Referrals</span>
             </h4>
               <h4>
               <i class="bi-check2-square bnb-icon"></i>
-              <span>12 hours withdraw cooldown.</span>
+              <span id="ref-bonus">12 hours Compound Timer</span>
             </h4>
               <h4>
               <i class="bi-check2-square bnb-icon"></i>
-              <span>36 hours cut off time.</span>
+              <span>4 hours Withdraw Cooldown</span>
             </h4>
             <h4>
               <i class="bi-check2-square bnb-icon"></i>
-              <span>60% feedback tax on 2 consecutive withdrawals.*Tax will stay in the contract.</span>
+              <span id="ref-bonus">Compound <span id="no-tax-compound-count">0</span> times to avoid feedback Tax!</span>
             </h4>
           </div>
           <div class="col-lg-6">
@@ -244,6 +242,13 @@
               </div> 
             </div>
           </div>
+		  
+              <span>
+			    <i class="ri-alert-line"></i>
+                <strong class="busd">Note:</strong> Funds that are deposited (including compounds) cannot be withdrawn, however the miner will pay daily dividends and
+				  referrals rewards for the life of the contract. Please use at your own risk. Remember, never invest more than you can afford to lose
+				  and always do your own research!
+              </span>
           <div class="row mt-5" style="justify-content: space-evenly;">
             <div class="col-xl-5 first-box">
               <div class="mine-card">
@@ -251,10 +256,10 @@
                   <div class="col-lg-8">
                     <div style="line-height: 1.8;">
                       <strong>
-                        Investment Example
+                        Hiring Example
                       </strong>
                       <div>
-                        <div>1<span class="busd"> CRO </span>gets you:</div>
+                        <div>100<span class="busd"> CRO </span>gets you:</div>
                         <div>
                           <i class="bi-minecart"></i>
                           Miners:
@@ -284,16 +289,25 @@
                     </div>
                   </div>
                 </div>
+				<div class="timer">
+                    <i class="bi-hourglass-split"></i>
+                    Cart will be full in
+                  </div>
+                  <div style="text-align: center; padding-bottom: 7px;"><span id="claim-timer">--:--:--</span></div>
+				  <br>
                 <strong>
                   <i class="bi-bank"></i>
                   Deposit <span class="busd"> CRO </span>
                   <span class="usd">
-                    (<span id="max-deposit">0 </span> max)
-                  </span>
-                  <input class="form-control" id="bnb-spend" name="buy-miners" onChange="updateBuyPrice()" step="100" type="number" value="1">
+						( min<span class="busd" id="min-deposit">0 </span>, 
+					  </span>	
+				  <span class="usd">
+					max<span class="busd" id="max-deposit">0</span>)
+				  </span>
+                  <input class="form-control" id="bnb-spend" name="buy-miners" onChange="updateBuyPrice()" step="100" type="number" value="100">
                 </strong>
                 <br>
-                <button class="btn glow-on-hover" id="buy-eggs-btn" onclick="buyEggs()" role="button" disabled style="margin-top: 6px;">
+                <button class="btn glow-on-hover" id="buy-eggs-btn" onclick="buyEggs()" role="button" disabled style="margin-top: 4px;">
                   Hire
                   <span id="eggs-to-buy">0</span>
                   Miners
@@ -316,6 +330,7 @@
                     <strong id="mined">-</strong>
                     <span><strong class="busd"> CRO </strong></span>
                   </div>
+				  <br><br>
                   <span class="usd" style="font-size: 14px;">
              <!--       ≈ $<span id="mined-usd" >- </span> USD -->
                   </span> 
@@ -328,18 +343,18 @@
                   </div>
                 </div>
                 <div>
-                  <div class="timer">
-                    <i class="bi-hourglass-split"></i>
-                    Cart will be full in
-                  </div>
-                  <br>
-                  <div style="text-align: center; padding-bottom: 7px;"><span id="claim-timer">--:--:--</span></div>
+				  <div class="timer" style="color:white;">
+				<i class="bi-arrow-repeat"></i>
+    			Compound Count: 
+				</div>
+				<div style="text-align: center;"><span id="compound-count">0 Day/s</span></div>
+				<br><br>
                   <div class="btn-container">
                     <div>
                       <button class="btn glow-on-hover" id="withdraw" onclick="sellEggs()" role="button" disabled>
                         Withdraw
                         <span class="cooldown" id="cooldown-timer">in --:--:--</span>
-                        <span class="tax" id="withdraw-tax">-40% tax</span>
+                        <span class="tax" id="withdraw-tax">-60% tax</span>
                       </button>
                     </div>
                     <br>
