@@ -9,25 +9,26 @@ var lastSecondsUntilFull=100
 var lastHatchTime=0
 var eggstohatch1=0
 var maxDeposit=0
+var minDeposit=0
 var totalDeposits=0
-var lastUpdate=new Date().getTime()
+var lastUpdate = new Date().getTime()
 var contractBalance;
 
 var compoundPercent=0;
 var compoundMaxDays=0;
+var compoundCount=0;
 var compoundStep=0;
-
 var cutoffStep=0;
 var withdrawCooldown=0;
 
 var contract;
-const minerAddress = '0x5c4B74733a8cF27DEC072674B78d9952f20F459e'; // mainnet contract
-const communityWallet = '0x7eC5c8753Ed76A517A5C48DE14F489f334B33ED2'; // current community wallet
+
+const minerAddress = '0xA713Dc7eeA81724d5526f583a42Fa1827cBa3c75'; // mainnet contract
 
 var started = true;
 var canSell = true;
 
-const minerAbi = [{"inputs":[{"internalType":"address payable","name":"_owner","type":"address"},{"internalType":"address payable","name":"_taxWallet","type":"address"},{"internalType":"address payable","name":"_partner","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[{"internalType":"uint256","name":"value","type":"uint256"}],"name":"BONUS_COMPOUND_STEP","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"value","type":"uint256"}],"name":"BONUS_DAILY_COMPOUND","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"value","type":"uint256"}],"name":"BONUS_DAILY_COMPOUND_BONUS_MAX_TIMES","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"value","type":"address"}],"name":"CHANGE_FEE_WALLET","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"value","type":"address"}],"name":"CHANGE_OWNERSHIP","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"value","type":"address"}],"name":"CHANGE_PARTNER_WALLET","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"COMPOUND_BONUS","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"COMPOUND_BONUS_MAX_TIMES","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"COMPOUND_STEP","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"CUTOFF_STEP","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"EGGS_TO_HIRE_1MINERS","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"EGGS_TO_HIRE_1MINERS_COMPOUND","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"MARKET_EGGS_DIVISOR","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"MARKET_EGGS_DIVISOR_SELL","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"MIN_INVEST_LIMIT","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"PERCENTS_DIVIDER","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"value","type":"uint256"}],"name":"PRC_EGGS_TO_HIRE_1MINERS","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"value","type":"uint256"}],"name":"PRC_EGGS_TO_HIRE_1MINERS_COMPOUND","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"value","type":"uint256"}],"name":"PRC_MARKET_EGGS_DIVISOR","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"value","type":"uint256"}],"name":"PRC_MARKET_EGGS_DIVISOR_SELL","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"value","type":"uint256"}],"name":"PRC_REFERRAL","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"value","type":"uint256"}],"name":"PRC_TAX","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"REFERRAL","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"value","type":"uint256"}],"name":"SET_CUTOFF_STEP","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"value","type":"uint256"}],"name":"SET_INVEST_MIN","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"value","type":"uint256"}],"name":"SET_WALLET_DEPOSIT_LIMIT","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"value","type":"uint256"}],"name":"SET_WITHDRAWAL_TAX","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"value","type":"uint256"}],"name":"SET_WITHDRAW_COOLDOWN","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"value","type":"uint256"}],"name":"SET_WITHDRAW_DAYS_TAX","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"TAX","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"WALLET_DEPOSIT_LIMIT","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"WITHDRAWAL_TAX","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"WITHDRAWAL_TAX_DAYS","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"WITHDRAW_COOLDOWN","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"ref","type":"address"}],"name":"buyEggs","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"uint256","name":"eth","type":"uint256"},{"internalType":"uint256","name":"contractBalance","type":"uint256"}],"name":"calculateEggBuy","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"eth","type":"uint256"}],"name":"calculateEggBuySimple","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"eggs","type":"uint256"}],"name":"calculateEggSell","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"eggs","type":"uint256"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"calculateEggSellForYield","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"rt","type":"uint256"},{"internalType":"uint256","name":"rs","type":"uint256"},{"internalType":"uint256","name":"bs","type":"uint256"}],"name":"calculateTrade","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"contractStarted","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_adr","type":"address"}],"name":"getAvailableEarnings","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getBalance","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_adr","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"getDailyCompoundBonus","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"adr","type":"address"}],"name":"getEggsSinceLastHatch","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"getEggsYield","outputs":[{"internalType":"uint256","name":"","type":"uint256"},{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getMyEggs","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getMyMiners","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getSiteInfo","outputs":[{"internalType":"uint256","name":"_totalStaked","type":"uint256"},{"internalType":"uint256","name":"_totalDeposits","type":"uint256"},{"internalType":"uint256","name":"_totalCompound","type":"uint256"},{"internalType":"uint256","name":"_totalRefBonus","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getTimeStamp","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_adr","type":"address"}],"name":"getUserInfo","outputs":[{"internalType":"uint256","name":"_initialDeposit","type":"uint256"},{"internalType":"uint256","name":"_userDeposit","type":"uint256"},{"internalType":"uint256","name":"_miners","type":"uint256"},{"internalType":"uint256","name":"_claimedEggs","type":"uint256"},{"internalType":"uint256","name":"_lastHatch","type":"uint256"},{"internalType":"address","name":"_referrer","type":"address"},{"internalType":"uint256","name":"_referrals","type":"uint256"},{"internalType":"uint256","name":"_totalWithdrawn","type":"uint256"},{"internalType":"uint256","name":"_referralEggRewards","type":"uint256"},{"internalType":"uint256","name":"_dailyCompoundBonus","type":"uint256"},{"internalType":"uint256","name":"_lastWithdrawTime","type":"uint256"},{"internalType":"uint256","name":"_withdrawCount","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"bool","name":"isCompound","type":"bool"}],"name":"hatchEggs","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"initialize","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"marketEggs","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address payable","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"partner","outputs":[{"internalType":"address payable","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"sellEggs","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"taxWallet","outputs":[{"internalType":"address payable","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalCompound","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalDeposits","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalRefBonus","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalStaked","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalWithdrawn","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"users","outputs":[{"internalType":"uint256","name":"initialDeposit","type":"uint256"},{"internalType":"uint256","name":"userDeposit","type":"uint256"},{"internalType":"uint256","name":"miners","type":"uint256"},{"internalType":"uint256","name":"claimedEggs","type":"uint256"},{"internalType":"uint256","name":"lastHatch","type":"uint256"},{"internalType":"address","name":"referrer","type":"address"},{"internalType":"uint256","name":"referralsCount","type":"uint256"},{"internalType":"uint256","name":"referralEggRewards","type":"uint256"},{"internalType":"uint256","name":"totalWithdrawn","type":"uint256"},{"internalType":"uint256","name":"dailyCompoundBonus","type":"uint256"},{"internalType":"uint256","name":"withdrawCount","type":"uint256"},{"internalType":"uint256","name":"lastWithdrawTime","type":"uint256"}],"stateMutability":"view","type":"function"}]
+const minerAbi = [{"inputs":[{"internalType":"address payable","name":"_owner","type":"address"},{"internalType":"address payable","name":"_dev1","type":"address"},{"internalType":"address payable","name":"_dev2","type":"address"},{"internalType":"address payable","name":"_mkt","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[{"internalType":"uint256","name":"value","type":"uint256"}],"name":"BONUS_COMPOUND_STEP","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"value","type":"uint256"}],"name":"BONUS_DAILY_COMPOUND","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"value","type":"uint256"}],"name":"BONUS_DAILY_COMPOUND_BONUS_MAX_TIMES","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"value","type":"address"}],"name":"CHANGE_DEV1","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"value","type":"address"}],"name":"CHANGE_DEV2","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"value","type":"address"}],"name":"CHANGE_MKT_WALLET","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"value","type":"address"}],"name":"CHANGE_OWNERSHIP","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"COMPOUND_BONUS","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"COMPOUND_BONUS_MAX_TIMES","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"COMPOUND_FOR_NO_TAX_WITHDRAWAL","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"COMPOUND_STEP","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"CUTOFF_STEP","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"EGGS_TO_HIRE_1MINERS","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"MARKET_EGGS_DIVISOR","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"MARKET_EGGS_DIVISOR_SELL","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"MIN_INVEST_LIMIT","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"PERCENTS_DIVIDER","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"value","type":"uint256"}],"name":"PRC_DEV","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"value","type":"uint256"}],"name":"PRC_EGGS_TO_HIRE_1MINERS","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"value","type":"uint256"}],"name":"PRC_MARKET_EGGS_DIVISOR","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"value","type":"uint256"}],"name":"PRC_MKT","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"value","type":"uint256"}],"name":"PRC_REFERRAL","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"REFERRAL","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"value","type":"uint256"}],"name":"SET_COMPOUND_FOR_NO_TAX_WITHDRAWAL","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"value","type":"uint256"}],"name":"SET_CUTOFF_STEP","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"value","type":"uint256"}],"name":"SET_MIN_INVEST_LIMIT","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"value","type":"uint256"}],"name":"SET_WALLET_DEPOSIT_LIMIT","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"value","type":"uint256"}],"name":"SET_WITHDRAWAL_TAX","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"value","type":"uint256"}],"name":"SET_WITHDRAW_COOLDOWN","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"WALLET_DEPOSIT_LIMIT","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"WITHDRAWAL_TAX","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"WITHDRAW_COOLDOWN","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"ref","type":"address"}],"name":"buyEggs","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"uint256","name":"eth","type":"uint256"},{"internalType":"uint256","name":"contractBalance","type":"uint256"}],"name":"calculateEggBuy","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"eth","type":"uint256"}],"name":"calculateEggBuySimple","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"eggs","type":"uint256"}],"name":"calculateEggSell","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"eggs","type":"uint256"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"calculateEggSellForYield","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"rt","type":"uint256"},{"internalType":"uint256","name":"rs","type":"uint256"},{"internalType":"uint256","name":"bs","type":"uint256"}],"name":"calculateTrade","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"contractStarted","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_adr","type":"address"}],"name":"getAvailableEarnings","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getBalance","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_adr","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"getDailyCompoundBonus","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"adr","type":"address"}],"name":"getEggsSinceLastHatch","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"getEggsYield","outputs":[{"internalType":"uint256","name":"","type":"uint256"},{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getMyEggs","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getMyMiners","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getSiteInfo","outputs":[{"internalType":"uint256","name":"_totalStaked","type":"uint256"},{"internalType":"uint256","name":"_totalDeposits","type":"uint256"},{"internalType":"uint256","name":"_totalCompound","type":"uint256"},{"internalType":"uint256","name":"_totalRefBonus","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getTimeStamp","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_adr","type":"address"}],"name":"getUserInfo","outputs":[{"internalType":"uint256","name":"_initialDeposit","type":"uint256"},{"internalType":"uint256","name":"_userDeposit","type":"uint256"},{"internalType":"uint256","name":"_miners","type":"uint256"},{"internalType":"uint256","name":"_claimedEggs","type":"uint256"},{"internalType":"uint256","name":"_lastHatch","type":"uint256"},{"internalType":"address","name":"_referrer","type":"address"},{"internalType":"uint256","name":"_referrals","type":"uint256"},{"internalType":"uint256","name":"_totalWithdrawn","type":"uint256"},{"internalType":"uint256","name":"_referralEggRewards","type":"uint256"},{"internalType":"uint256","name":"_dailyCompoundBonus","type":"uint256"},{"internalType":"uint256","name":"_lastWithdrawTime","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"bool","name":"isCompound","type":"bool"}],"name":"hatchEggs","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"seedMarket","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[],"name":"sellEggs","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"totalCompound","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalDeposits","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalRefBonus","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalStaked","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalWithdrawn","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"users","outputs":[{"internalType":"uint256","name":"initialDeposit","type":"uint256"},{"internalType":"uint256","name":"userDeposit","type":"uint256"},{"internalType":"uint256","name":"miners","type":"uint256"},{"internalType":"uint256","name":"claimedEggs","type":"uint256"},{"internalType":"uint256","name":"lastHatch","type":"uint256"},{"internalType":"address","name":"referrer","type":"address"},{"internalType":"uint256","name":"referralsCount","type":"uint256"},{"internalType":"uint256","name":"referralEggRewards","type":"uint256"},{"internalType":"uint256","name":"totalWithdrawn","type":"uint256"},{"internalType":"uint256","name":"dailyCompoundBonus","type":"uint256"},{"internalType":"uint256","name":"lastWithdrawTime","type":"uint256"}],"stateMutability":"view","type":"function"}]
 
 // ------ contract calls
 
@@ -125,12 +126,12 @@ function roundNum(num) {
 
 function refreshData() {
     console.log('Refreshing data...')
-    try {
-        tokenPrice(function(bnbPrice){
-            var priceJson = JSON.parse(bnbPrice)
-            priceInUSD = +priceJson['binancecoin']['usd'];
-        });
-    } catch { priceInUSD = 0; }
+    // try {
+    //     tokenPrice(function(bnbPrice){
+    //         var priceJson = JSON.parse(bnbPrice)
+    //         priceInUSD = +priceJson['binancecoin']['usd'];
+    //     });
+    // } catch { priceInUSD = 0; }
 
     contract.methods.EGGS_TO_HIRE_1MINERS().call().then(eggs => {
         eggstohatch1 = eggs
@@ -138,34 +139,27 @@ function refreshData() {
         var apr = dailyPercent * 365;
         $("#daily-rate").html(`${dailyPercent}% Daily ~ ${apr}% APR`);
     }).catch((err) => {
-        console.log(err);
+        console.log('EGGS_TO_HIRE_1MINERS', err);
     });
 
     contract.methods.COMPOUND_BONUS().call().then(r => {
         compoundPercent = r / 10;
-        $("#daily-compound").html(`${compoundPercent}% Daily Compound Bonus`)
+        $("#daily-compound").html(`${compoundPercent}% Compound Bonus`)
         $("#compound-percent").html(`${compoundPercent}%`)
     }).catch((err) => {
-        console.log(err);
-    });
-
-    contract.methods.TAX().call().then(t => {
-        var tax = Number(t / 10);
-        $("#community-tax").html(`${tax}% to Community Fund`)
-    }).catch((err) => {
-        console.log(err);
+        console.log('COMPOUND_BONUS', err);
     });
 
     contract.methods.CUTOFF_STEP().call().then(cutoff => {
         cutoffStep = cutoff;
     }).catch((err) => {
-        console.log(err);
+        console.log('CUTOFF_STEP', err);
     })
 
     contract.methods.WITHDRAW_COOLDOWN().call().then(cooldown => {
         withdrawCooldown = cooldown;
     }).catch((err) => {
-        console.log(err);
+        console.log('WITHDRAW_COOLDOWN', err);
     })
 
     contract.methods.REFERRAL().call().then(r => {
@@ -181,14 +175,29 @@ function refreshData() {
         var maxCompoundPercent = r*compoundPercent;
         $("#max-compound").html(`+${maxCompoundPercent}%`)
     }).catch((err) => {
-        console.log(err);
+        console.log('COMPOUND_BONUS_MAX_TIMES', err);
+    });
+	
+	contract.methods.COMPOUND_FOR_NO_TAX_WITHDRAWAL().call().then(r => {
+        compoundCount = r;
+        var maxCompoundForNoTax = compoundCount;
+        $("#no-tax-compound-count").html(`${maxCompoundForNoTax}`)
+    }).catch((err) => {
+        console.log('COMPOUND_FOR_NO_TAX_WITHDRAWAL', err);
     });
 
     contract.methods.WALLET_DEPOSIT_LIMIT().call().then(bnb => {
         maxDeposit = bnb;
-        $("#max-deposit").html(`${readableBNB(bnb)} CRO`)
+        $("#max-deposit").html(`${readableBNB(bnb)} AVAX`)
     }).catch((err) => {
-        console.log(err);
+        console.log('WALLET_DEPOSIT_LIMIT', err);
+    });	
+	
+	contract.methods.MIN_INVEST_LIMIT().call().then(bnb => {
+        minDeposit = bnb;
+        $("#min-deposit").html(`${readableBNB(bnb)} AVAX`)
+    }).catch((err) => {
+        console.log('MIN_INVEST_LIMIT', err);
     });
 
     contract.methods.COMPOUND_STEP().call().then(step => {
@@ -197,7 +206,7 @@ function refreshData() {
         console.log(err);
     });
 
-    /** How many miners and eggs per day user will recieve for 1 BNB deposit **/
+    /** How many miners and eggs per day user will recieve for 1 AVAX deposit **/
     contract.methods.getEggsYield(web3.utils.toWei('1')).call().then(result => {
         var miners = result[0];
         var bnb = result[1];
@@ -205,8 +214,8 @@ function refreshData() {
 
         $("#example-miners").html(miners)
         $("#example-bnb").html(roundNum(amt))
-        var usd = Number(priceInUSD*amt).toFixed(2);
-        $("#example-usd").html(usd)
+        //var usd = Number(priceInUSD*amt).toFixed(2);
+        //$("#example-usd").html(usd)
     }).catch((err) => {
         console.log(err);
     });
@@ -216,8 +225,8 @@ function refreshData() {
             contractBalance = balance;
             var amt = web3.utils.fromWei(balance);
             $('#contract-balance').html(roundNum(amt));
-            var usd = Number(priceInUSD*amt).toFixed(2);
-            $("#contract-balance-usd").html(usd)
+            //var usd = Number(priceInUSD*amt).toFixed(2);
+            //$("#contract-balance-usd").html(usd)
         }).catch((err) => {
             console.log(err);
         });
@@ -225,18 +234,18 @@ function refreshData() {
         contract.methods.getSiteInfo().call().then(result => {
             var staked = web3.utils.fromWei(result._totalStaked);
             $('#total-staked').html(roundNum(staked));
-            var stakedUSD = Number(priceInUSD*staked).toFixed(2);
-            $("#total-staked-usd").html(stakedUSD)
+            //var stakedUSD = Number(priceInUSD*staked).toFixed(2);
+            //$("#total-staked-usd").html(stakedUSD)
             $('#total-players').html(result._totalDeposits);
             var ref = result._totalRefBonus;
             if (ref > 0) {
                 var refBNB = readableBNB(ref, 2);
                 $("#total-ref").html(refBNB);
-                var refUSD = Number(priceInUSD*refBNB).toFixed(2);
-                $('#total-ref-usd').html(refUSD)
+                //var refUSD = Number(priceInUSD*refBNB).toFixed(2);
+                //$('#total-ref-usd').html(refUSD)
             } else {
-                $('#total-ref').html('0');
                 $('#total-ref-usd').html('0.00');
+                $('#total-ref').html('0');
             }
         }).catch((err) => {
             console.log(err);
@@ -247,20 +256,11 @@ function refreshData() {
         usrBal = userBalance;
         var amt = web3.utils.fromWei(userBalance);
         $("#user-balance").html(roundNum(amt));
-        var usd = Number(priceInUSD*amt).toFixed(2);
-        $("#user-balance-usd").html(usd)
+        //var usd = Number(priceInUSD*amt).toFixed(2);
+        //$("#user-balance-usd").html(usd)
     }).catch((err) => {
         console.log(err);
     });
-
-//    web3.eth.getBalance(communityWallet).then(cw => {
-//        var amt = web3.utils.fromWei(cw);
-//        $("#community-fund").html(roundNum(amt));
-//        var usd = Number(priceInUSD*amt).toFixed(2);
-//        $("#community-fund-usd").html(usd)
-//    }).catch((err) => {
-//        console.log(err);
-//    });
 
     contract.methods.getUserInfo(currentAddr).call().then(user => {
         var initialDeposit = user._initialDeposit;
@@ -288,6 +288,7 @@ function refreshData() {
         }
         var extraPercent = 0;
         console.log('dailyCompoundBonus = ' + dailyCompoundBonus)
+		$("#compound-count").html(`${dailyCompoundBonus} Day/s`);
         if (dailyCompoundBonus > 0) {
             extraPercent += dailyCompoundBonus * compoundPercent;
             $("#compound-bonus").html(`+${extraPercent}% bonus`);
@@ -315,8 +316,11 @@ function refreshData() {
             contract.methods.getAvailableEarnings(currentAddr).call().then(function (earnings) {
                 var bnbMined = readableBNB(earnings, 4)
                 $("#mined").html(bnbMined);
-                var minedUsd = Number(priceInUSD*bnbMined).toFixed(2);
-                $('#mined-usd').html(minedUsd)
+                //var minedUsd = Number(priceInUSD*bnbMined).toFixed(2);
+                //$('#mined-usd').html(minedUsd)
+            }).catch((err) => {
+                console.log('getAvailableEarnings', err);
+                throw err;
             });
         } else {
             $("#mined").html(0);
@@ -325,12 +329,12 @@ function refreshData() {
         if (referralEggRewards > 0) {
             var refBNB = readableBNB(referralEggRewards, 4);
             $("#ref-rewards-bnb").html(refBNB);
-            var refUSD = Number(priceInUSD*refBNB).toFixed(2);
-            $('#ref-rewards-usd').html(refUSD)
+            //var refUSD = Number(priceInUSD*refBNB).toFixed(2);
+            //$('#ref-rewards-usd').html(refUSD)
             $('#ref-count').html(referrals);
         } else {
             $("#ref-rewards-bnb").html("0");
-            $('#ref-rewards-usd').html("0.00");
+            //$('#ref-rewards-usd').html("0.00");
             $('#ref-count').html('0');
         }
 
@@ -344,12 +348,16 @@ function refreshData() {
             contract.methods.calculateEggSellForYield(eggsPerDay, web3.utils.toWei('1')).call().then(earnings => {
                 var eggsBNB = readableBNB(earnings, 4)
                 $("#eggs-per-day").html(eggsBNB);
-                var eggsUSD = Number(priceInUSD*eggsBNB).toFixed(2);
-                $('#eggs-per-day-usd').html(eggsUSD)
+                //var eggsUSD = Number(priceInUSD*eggsBNB).toFixed(2);
+                //$('#eggs-per-day-usd').html(eggsUSD)
+            }).catch((err) => {
+                console.log('calculateEggSellForYield', err);
+                throw err;
             });
         }
-
-        if (withdrawCount >= 1) {
+	console.log('compoundCount = ' + compoundCount)
+        //	    
+        if (dailyCompoundBonus < compoundCount) {
             contract.methods.WITHDRAWAL_TAX().call().then(tax => {
                 $("#withdraw-tax").html(`(-${tax/10}% tax)`)
             })
@@ -357,7 +365,7 @@ function refreshData() {
             $('#withdraw-tax').attr('hidden', true)
         }
     }).catch((err) => {
-        console.log(err);
+        console.log('getUserInfo', err);
     });
 
     updateBuyPrice();
@@ -386,23 +394,23 @@ function getQueryVariable(variable) {
 function setInitialDeposit(initialDeposit) {
     totalDeposits = initialDeposit;
     var initialBNB = readableBNB(initialDeposit, 2);
-    var initialUSD = Number(priceInUSD*initialBNB).toFixed(2);
+    //var initialUSD = Number(priceInUSD*initialBNB).toFixed(2);
     $("#initial-deposit").html(initialBNB);
-    $("#initial-deposit-usd").html(initialUSD);
+    //$("#initial-deposit-usd").html(initialUSD);
 }
 
 function setTotalDeposit(totalDeposit) {
     var totalBNB = readableBNB(totalDeposit, 2);
-    var totalUSD = Number(priceInUSD*totalBNB).toFixed(2);
+    //var totalUSD = Number(priceInUSD*totalBNB).toFixed(2);
     $("#total-deposit").html(totalBNB);
-    $("#total-deposit-usd").html(totalUSD);
+    //$("#total-deposit-usd").html(totalUSD);
 }
 
 function setTotalWithdrawn(totalWithdrawn) {
     var totalBNB = readableBNB(totalWithdrawn, 2);
-    var totalUSD = Number(priceInUSD*totalBNB).toFixed(2);
+    //var totalUSD = Number(priceInUSD*totalBNB).toFixed(2);
     $("#total-withdrawn").html(totalBNB);
-    $("#total-withdrawn-usd").html(totalUSD);
+    //$("#total-withdrawn-usd").html(totalUSD);
 }
 
 var x;
@@ -552,11 +560,11 @@ function buyEggs(){
 
     var amt = web3.utils.toWei(bnb);
 	if(+amt + +totalDeposits > +maxDeposit) {
-		alert(`you cannot deposit more than ${readableBNB(maxDeposit, 2)} CRO`);
+		alert(`you cannot deposit more than ${readableBNB(maxDeposit, 2)} AVAX`);
         return
     }
     if(+amt > usrBal) {
-		alert("you do not have " + bnb + " CRO in your wallet");
+		alert("you do not have " + bnb + " AVAX in your wallet");
         return
     }
 
@@ -624,7 +632,7 @@ function getBalance(callback){
 }
 
 function tokenPrice(callback) {
-	const url = "https://api.coingecko.com/api/v3/simple/price?ids=crypto-com-chain,usd&vs_currencies=usd";
+	const url = "https://api.coingecko.com/api/v3/simple/price?ids=binancecoin,usd&vs_currencies=usd";
 	httpGetAsync(url,callback);
 }
 function httpGetAsync(theUrl, callback) {
