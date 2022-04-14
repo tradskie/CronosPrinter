@@ -144,7 +144,7 @@ function refreshData() {
 
     contract.methods.COMPOUND_BONUS().call().then(r => {
         compoundPercent = r / 10;
-        $("#daily-compound").html(`${compoundPercent}% Daily Compound Bonus`)
+        $("#daily-compound").html(`${compoundPercent}% Compound Bonus`)
         $("#compound-percent").html(`${compoundPercent}%`)
     }).catch((err) => {
         console.log(err);
