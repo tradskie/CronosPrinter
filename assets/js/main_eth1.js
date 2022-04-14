@@ -166,6 +166,7 @@ function refreshData() {
 
     contract.methods.WITHDRAW_COOLDOWN().call().then(cooldown => {
         withdrawCooldown = cooldown;
+	$("#withdraw-cooldown").html(`${withdrawCooldown / 3600}`)
     }).catch((err) => {
         console.log(err);
     })
@@ -202,6 +203,7 @@ function refreshData() {
 
     contract.methods.COMPOUND_STEP().call().then(step => {
         compoundStep = step;
+	$("#compound-step").html(`${compoundStep / 3600}`)
     }).catch((err) => {
         console.log(err);
     });
