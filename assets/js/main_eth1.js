@@ -126,12 +126,12 @@ function roundNum(num) {
 
 function refreshData() {
     console.log('Refreshing data...')
-    try {
-        tokenPrice(function(bnbPrice){
-            var priceJson = JSON.parse(bnbPrice)
-            priceInUSD = +priceJson['binancecoin']['usd'];
-        });
-    } catch { priceInUSD = 0; }
+    //try {
+    //    tokenPrice(function(bnbPrice){
+    //        var priceJson = JSON.parse(bnbPrice)
+     //       priceInUSD = +priceJson['binancecoin']['usd'];
+     //   });
+    //} catch { priceInUSD = 0; }
 
     contract.methods.EGGS_TO_HIRE_1MINERS().call().then(eggs => {
         eggstohatch1 = eggs
@@ -156,13 +156,6 @@ function refreshData() {
         $("#no-tax-compound-count").html(`${maxCompoundForNoTax}`)
     }).catch((err) => {
         console.log('COMPOUND_FOR_NO_TAX_WITHDRAWAL', err);
-    });
-
-    contract.methods.TAX().call().then(t => {
-        var tax = Number(t / 10);
-        $("#community-tax").html(`${tax}% to Community Fund`)
-    }).catch((err) => {
-        console.log(err);
     });
 
     contract.methods.CUTOFF_STEP().call().then(cutoff => {
