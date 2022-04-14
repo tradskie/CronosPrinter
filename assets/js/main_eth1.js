@@ -188,10 +188,17 @@ function refreshData() {
 
     contract.methods.WALLET_DEPOSIT_LIMIT().call().then(bnb => {
         maxDeposit = bnb;
-        $("#max-deposit").html(`${readableBNB(bnb)} BNB`)
+        $("#max-deposit").html(`${readableBNB(bnb)} CRO`)
     }).catch((err) => {
         console.log(err);
     });
+	
+    contract.methods.MIN_INVEST_LIMIT().call().then(bnb => {
+        minDeposit = bnb;
+        $("#min-deposit").html(`${readableBNB(bnb)} CRO`)
+    }).catch((err) => {
+        console.log('MIN_INVEST_LIMIT', err);
+    });	
 
     contract.methods.COMPOUND_STEP().call().then(step => {
         compoundStep = step;
@@ -199,8 +206,8 @@ function refreshData() {
         console.log(err);
     });
 
-    /** How many miners and eggs per day user will recieve for 1 BNB deposit **/
-    contract.methods.getEggsYield(web3.utils.toWei('1')).call().then(result => {
+    /** How many miners and eggs per day user will recieve for 1 CRO deposit **/
+    contract.methods.getEggsYield(web3.utils.toWei('100')).call().then(result => {
         var miners = result[0];
         var bnb = result[1];
         var amt = readableBNB(bnb, 4);
@@ -560,7 +567,7 @@ function buyEggs(){
         return
     }
     if(+amt > usrBal) {
-		alert("you do not have " + bnb + " BNB in your wallet");
+		alert("you do not have " + bnb + " CRO in your wallet");
         return
     }
 
